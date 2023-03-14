@@ -1,4 +1,4 @@
-name: Build MIUI KSU for K40
+name: Build MIUI KSU K40
 
 on: 
   workflow_dispatch:
@@ -30,9 +30,7 @@ jobs:
       run: |
         cd android-kernel
         curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
-        wget -q "https://raw.githubusercontent.com/WeeAris/RK-KSU-AOSP-Daily-Build/main/0001-Add-KernelSU-calls-to-the-kernel-source.patch" -O KernelSU.patch
-        git apply ./KernelSU.patch
-    
+        
     - name: Generate Kernel Configuration
       run: |
         cd android-kernel
@@ -65,7 +63,6 @@ jobs:
         cd android-kernel
         PATH=${{ env.CLANG_DIR }}/bin:$PATH
         clang -v
-        #MAKE="./makeparallel"
         SUBARCH=arm64
         KBUILD_COMPILER_STRING="$(clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
         KBUILD_BUILD_HOST=GitHub-Action
