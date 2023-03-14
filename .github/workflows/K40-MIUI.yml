@@ -33,9 +33,9 @@ jobs:
       run: |
         cd android-kernel
         curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
-        wget -q "https://raw.githubusercontent.com/WeeAris/RK-KSU-AOSP-Daily-Build/main/0001-Add-KernelSU-calls-to-the-kernel-source.patch" -O KernelSU.patch
-        git apply ./KernelSU.patch
-        
+        wget -q "https://raw.githubusercontent.com/WeeAris/RK-KSU-AOSP-Daily-Build/main/0001-Add-KernelSU-calls-to-the-kernel-source.patch" -O KernelSU.patch
+           git apply ./KernelSU.patch
+ 
     - name: Generate Kernel Configuration
       run: |
         cd android-kernel
@@ -55,14 +55,13 @@ jobs:
         KSU_VERSION=$((10000+200+`git rev-list --count HEAD`))
         cd $KERNEL_DIR
         ######################
-        make CC=clang O=out ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_COMPAT=arm-linux-gnueabi- NM=llvm-nm OBJDUMP=llvm-objdump STRIP=llvm-strip LLVM=1 LLVM_IAS=1 $KERNEL_DEFCONFIG 
+        make CC=clang O=out ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_COMPAT=arm-linux-gnueabi- NM=llvm-nm OBJDUMP=llvm-objdump STRIP=llvm-strip $KERNEL_DEFCONFIG 
         ######################
         sed -i "/RealKing/{s/-/-${KSU_VERSION}-/}" out/.config
         sed -i "/RealKing/{s/RealKing/RK-KSU/}" out/.config
         KERNEL_NAME=`grep "RK-KSU" out/.config | sed 's|//|-|' | awk -F\" '{print $2}'`
         echo "ZIMAGE_NAME=${KERNEL_NAME}-${DEVICE_NAME}" >> $GITHUB_ENV
-        
-        
+               
     - name: Build Kernel
       run: |
         cd android-kernel
@@ -73,7 +72,7 @@ jobs:
         KBUILD_COMPILER_STRING="$(clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
         KBUILD_BUILD_HOST=GitHub-Action
         KBUILD_BUILD_USER=$(echo ${{ github.actor }} | tr A-Z a-z)       
-        make -j$(nproc --all) CC=clang O=out ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_COMPAT=arm-linux-gnueabi- LD=ld.${LINKER} AR=llvm-ar NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump STRIP=llvm-strip ld-name=${LINKER}
+        make -j$(nproc --all) CC=clang O=out ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_COMPAT=arm-linux-gnueabi- NM=llvm-nm STRIP=llvm-strip OBJDUMP=llvm-objdump
   
     - name: ZIP Kernel
       run: |
