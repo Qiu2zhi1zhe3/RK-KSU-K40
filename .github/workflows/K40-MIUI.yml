@@ -33,6 +33,8 @@ jobs:
       run: |
         cd android-kernel
         curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
+        wget -q "https://raw.githubusercontent.com/WeeAris/RK-KSU-AOSP-Daily-Build/main/0001-Add-KernelSU-calls-to-the-kernel-source.patch" -O KernelSU.patch
+        git apply ./KernelSU.patch
         
     - name: Generate Kernel Configuration
       run: |
@@ -53,7 +55,7 @@ jobs:
         KSU_VERSION=$((10000+200+`git rev-list --count HEAD`))
         cd $KERNEL_DIR
         ######################
-        make CC=clang O=out ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_COMPAT=arm-linux-gnueabi- NM=llvm-nm  OBJDUMP=llvm-objdump STRIP=llvm-strip LLVM=1 LLVM_IAS=1 $KERNEL_DEFCONFIG 
+        make CC=clang O=out ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_COMPAT=arm-linux-gnueabi- NM=llvm-nm OBJDUMP=llvm-objdump STRIP=llvm-strip LLVM=1 LLVM_IAS=1 $KERNEL_DEFCONFIG 
         ######################
         sed -i "/RealKing/{s/-/-${KSU_VERSION}-/}" out/.config
         sed -i "/RealKing/{s/RealKing/RK-KSU/}" out/.config
