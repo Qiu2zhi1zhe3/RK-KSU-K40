@@ -7,8 +7,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    uses: actions/checkout@v3
     - name: Checkout Kernel Source Code
-      uses: actions/checkout@v3
       run: |
         git clone --depth=1 https://codeberg.org/HK122707/K40-KSU -b 12.1-alioth android-kernel
       
