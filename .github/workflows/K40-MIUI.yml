@@ -12,7 +12,7 @@ jobs:
       with:
         github-server-url: 'https://github.com'
         repository: Rohail33/Realking_kernel_sm8250
-        ref: base
+        ref: base2
         path: android-kernel
       
     - name: Setup Build Environment
