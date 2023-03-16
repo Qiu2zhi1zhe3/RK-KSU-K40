@@ -79,10 +79,10 @@ jobs:
         cp -rp ./AnyKernel3/* tmp
         cd tmp
         7za a -mx9 tmp.zip *
-        cd..
+        cd ..
         echo "FINAL_ZINAME="${{ env.ZIMAGE_NAME }}"" >> $GITHUB_ENV
         FINAL_ZINAME="${{ env.ZIMAGE_NAME }}"
-        cp -fp tmp/tmp.zip ${FINAL_ZINAME}.zip
+        cp -fp tmp/tmp.zip tmp/${FINAL_ZINAME}.zip
         rm -rf tmp/tmp.zip
         rm -rf out
         
