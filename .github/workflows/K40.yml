@@ -79,7 +79,6 @@ jobs:
         cp -rp ./AnyKernel3/* tmp
         cd tmp
         7za a -mx9 tmp.zip *
-        cd ..
         echo "FINAL_ZINAME="${{ env.ZIMAGE_NAME }}"" >> $GITHUB_ENV
         FINAL_ZINAME="${{ env.ZIMAGE_NAME }}"
         cp -fp tmp/tmp.zip ${FINAL_ZINAME}.zip
@@ -90,7 +89,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: ${{ env.FINAL_ZINAME }}
-        path: tmp/*
+        path: tmp/${FINAL_ZINAME}.zip
         
 
     
