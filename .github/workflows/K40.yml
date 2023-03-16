@@ -82,9 +82,8 @@ jobs:
         cd ..
         echo "FINAL_ZINAME="${{ env.ZIMAGE_NAME }}"" >> $GITHUB_ENV
         FINAL_ZINAME="${{ env.ZIMAGE_NAME }}"
-        cp -fp tmp/tmp.zip tmp/RK-K40_MIUI(SU).zip
-        rm -rf tmp/tmp.zip
-        rm -rf out
+        cp -fp tmp/tmp.zip RK-K40_MIUI(SU).zip
+        rm -rf tmp/tmp.zip        
         
     - name: Upload Kernel Image ZIP
       uses: actions/upload-artifact@v3
