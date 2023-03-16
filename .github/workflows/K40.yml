@@ -82,7 +82,7 @@ jobs:
         cd ..
         echo "FINAL_ZINAME="${{ env.ZIMAGE_NAME }}"" >> $GITHUB_ENV
         FINAL_ZINAME="${{ env.ZIMAGE_NAME }}"
-        cp -fp tmp/tmp.zip tmp/${FINAL_ZINAME}.zip
+        cp -fp tmp/tmp.zip tmp/RK-K40_MIUI(SU).zip
         rm -rf tmp/tmp.zip
         rm -rf out
         
@@ -90,7 +90,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: ${{ env.FINAL_ZINAME }}
-        path: tmp/${FINAL_ZINAME}.zip
+        path: tmp/RK-K40_MIUI(SU).zip
         
 
     
