@@ -56,8 +56,7 @@ jobs:
         sed -i "/RealKing/{s/RealKing/RK-KSU/}" out/.config
         KERNEL_NAME=`grep "RK-KSU" out/.config | sed 's|//|-|' | awk -F\" '{print $2}'`
         echo "ZIMAGE_NAME=${KERNEL_NAME}-${DEVICE_NAME}" >> $GITHUB_ENV
-        
-        
+                
     - name: Build Kernel
       run: |
         cd android-kernel
@@ -77,22 +76,21 @@ jobs:
         cp -fp ${{ env.ZIMAGE_DIR }}/Image.gz tmp
         cp -fp ${{ env.ZIMAGE_DIR }}/dtbo.img tmp
         cp -fp ${{ env.ZIMAGE_DIR }}/dtb tmp
-        cp -rp ./anykernel/* tmp
+        cp -rp ./AnyKernel3/* tmp
         cd tmp
         7za a -mx9 tmp.zip *
         cd ..
         echo "FINAL_ZINAME="${{ env.ZIMAGE_NAME }}"" >> $GITHUB_ENV
         FINAL_ZINAME="${{ env.ZIMAGE_NAME }}"
-        mkdir ${{ env.KERNEL_DIR }}/image_output
-        cp -fp tmp/tmp.zip ../image_output/${FINAL_ZINAME}.zip
-        md5sum ../image_output/${FINAL_ZINAME}.zip >../image_output/${FINAL_ZINAME}.zip.md5sum
+        cp -fp tmp/tmp.zip ${FINAL_ZINAME}.zip
+        rm -rf tmp/tmp.zip
         rm -rf out
         
     - name: Upload Kernel Image ZIP
       uses: actions/upload-artifact@v3
       with:
         name: ${{ env.FINAL_ZINAME }}
-        path: image_output/*
+        path: tmp/*
         
 
     
