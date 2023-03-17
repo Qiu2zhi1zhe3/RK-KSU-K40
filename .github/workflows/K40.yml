@@ -1,4 +1,4 @@
-name: Build MIUI KSU K40
+name: Build MIUI K40-SU
 
 on: 
   workflow_dispatch:
@@ -70,7 +70,6 @@ jobs:
   
     - name: ZIP Kernel
       run: |
-        mkdir image_output
         cd android-kernel
         mkdir -p tmp
         cp -fp ${{ env.ZIMAGE_DIR }}/Image.gz tmp
@@ -80,13 +79,13 @@ jobs:
         cd tmp
         7za a -mx9 K40-MIUI(SU).zip *
         cd ..
-        rm -rf out
         
     - name: Upload Kernel Image ZIP
       uses: actions/upload-artifact@v3
       with:
         name: K40-MIUI(SU)
         path: tmp/K40-MIUI(SU).zip
+        rm -rf out
         
 
     
