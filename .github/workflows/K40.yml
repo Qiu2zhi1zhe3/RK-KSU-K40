@@ -43,7 +43,7 @@ jobs:
         ARCH=arm64
         SUBARCH=arm64
         KBUILD_COMPILER_STRING="$(clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
-        KBUILD_BUILD_HOST=GitHub-Action
+        KBUILD_BUILD_HOST=GitHub
         KBUILD_BUILD_USER=$(echo ${{ github.actor }} | tr A-Z a-z)
         ######################
         cd $KERNEL_DIR/KernelSU
@@ -64,12 +64,13 @@ jobs:
         clang -v
         SUBARCH=arm64
         KBUILD_COMPILER_STRING="$(clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
-        KBUILD_BUILD_HOST=GitHub-Action
+        KBUILD_BUILD_HOST=GitHub
         KBUILD_BUILD_USER=$(echo ${{ github.actor }} | tr A-Z a-z)       
         make -j$(nproc --all) CC=clang O=out ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_COMPAT=arm-linux-gnueabi- NM=llvm-nm OBJDUMP=llvm-objdump STRIP=llvm-strip 
   
     - name: ZIP Kernel
       run: |
+        mkdir image_output
         cd android-kernel
         mkdir -p tmp
         cp -fp ${{ env.ZIMAGE_DIR }}/Image.gz tmp
@@ -77,15 +78,18 @@ jobs:
         cp -fp ${{ env.ZIMAGE_DIR }}/dtb tmp
         cp -rp ./AnyKernel3/* tmp
         cd tmp
-        7za a -mx9 K40-MIUI(SU).zip *
+        7za a -mx9 tmp.zip *
         cd ..
+        echo "FINAL_ZINAME="${{ env.ZIMAGE_NAME }}"" >> $GITHUB_ENV
+        FINAL_ZINAME="${{ env.ZIMAGE_NAME }}"
+        mkdir ${{ env.KERNEL_DIR }}/image_output
+        cp -fp tmp/tmp.zip ../image_output/${FINAL_ZINAME}.zip
+        md5sum ../image_output/${FINAL_ZINAME}.zip >../image_output/${FINAL_ZINAME}.zip.md5sum
+        rm -rf out
         
     - name: Upload Kernel Image ZIP
       uses: actions/upload-artifact@v3
       with:
-        name: K40-MIUI(SU)
-        path: tmp/K40-MIUI(SU).zip
-        
-
-    
+        name: ${{ env.FINAL_ZINAME }}
+        path: image_output/*
           
