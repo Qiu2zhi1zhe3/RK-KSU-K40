@@ -85,7 +85,6 @@ jobs:
       with:
         name: K40-MIUI(SU)
         path: tmp/K40-MIUI(SU).zip
-        rm -rf out
         
 
     
