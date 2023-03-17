@@ -78,17 +78,15 @@ jobs:
         cp -fp ${{ env.ZIMAGE_DIR }}/dtb tmp
         cp -rp ./AnyKernel3/* tmp
         cd tmp
-        7za a -mx9 tmp.zip *
+        7za a -mx9 K40-MIUI(SU).zip *
         cd ..
-        echo "FINAL_ZINAME="${{ env.ZIMAGE_NAME }}"" >> $GITHUB_ENV
-        FINAL_ZINAME="${{ env.ZIMAGE_NAME }}"
         rm -rf out
         
     - name: Upload Kernel Image ZIP
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ env.FINAL_ZINAME }}
-        path: tmp/*.zip
+        name: K40-MIUI(SU)
+        path: tmp/K40-MIUI(SU).zip
         
 
     
