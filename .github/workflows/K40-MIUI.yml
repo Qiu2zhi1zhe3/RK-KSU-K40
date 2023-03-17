@@ -81,7 +81,7 @@ jobs:
         cp -fp ${{ env.ZIMAGE_DIR }}/Image.gz tmp
         cp -fp ${{ env.ZIMAGE_DIR }}/dtbo.img tmp
         cp -fp ${{ env.ZIMAGE_DIR }}/dtb tmp
-        cp -rp ./AnyKernel3/* tmp
+        cp -rp ./anykernel/* tmp
         cd tmp
         7za a -mx9 tmp.zip *
         cd ..
