@@ -12,7 +12,7 @@ jobs:
       with:
         github-server-url: 'https://github.com'
         repository: Rohail33/Realking_kernel_sm8250
-        ref: base2
+        ref: base
         path: android-kernel
       
     - name: Setup Build Environment
@@ -48,7 +48,7 @@ jobs:
         ARCH=arm64
         SUBARCH=arm64
         KBUILD_COMPILER_STRING="$(clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
-        KBUILD_BUILD_HOST=GitHub-Action
+        KBUILD_BUILD_HOST=GitHub
         KBUILD_BUILD_USER=$(echo ${{ github.actor }} | tr A-Z a-z)
         ######################
         cd $KERNEL_DIR/KernelSU
@@ -69,9 +69,9 @@ jobs:
         clang -v
         SUBARCH=arm64
         KBUILD_COMPILER_STRING="$(clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
-        KBUILD_BUILD_HOST=GitHub-Action
+        KBUILD_BUILD_HOST=GitHub
         KBUILD_BUILD_USER=$(echo ${{ github.actor }} | tr A-Z a-z)       
-        make -j$(nproc --all) CC=clang O=out ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_COMPAT=arm-linux-gnueabi- NM=llvm-nm STRIP=llvm-strip OBJDUMP=llvm-objdump LLVM=1 LLVM_IAS=1 LD=ld.lld
+        make -j$(nproc --all) CC=clang O=out ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_COMPAT=arm-linux-gnueabi- LLVM=1 LLVM_IAS=1
   
     - name: ZIP Kernel
       run: |
@@ -81,7 +81,7 @@ jobs:
         cp -fp ${{ env.ZIMAGE_DIR }}/Image.gz tmp
         cp -fp ${{ env.ZIMAGE_DIR }}/dtbo.img tmp
         cp -fp ${{ env.ZIMAGE_DIR }}/dtb tmp
-        cp -rp ./anykernel/* tmp
+        cp -rp ./AnyKernel3/* tmp
         cd tmp
         7za a -mx9 tmp.zip *
         cd ..
@@ -98,6 +98,5 @@ jobs:
         name: ${{ env.FINAL_ZINAME }}
         path: image_output/*
         
-
-    
+ 
           
