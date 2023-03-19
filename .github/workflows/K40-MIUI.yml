@@ -28,7 +28,14 @@ jobs:
         7za x clang.7z
         CLANG_DIR=`pwd`
         echo "CLANG_DIR=$CLANG_DIR" >> $GITHUB_ENV
-          
+      
+    - name: Setup KernelSU
+      run: |
+        cd android-kernel
+        curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
+        wget -q "https://raw.githubusercontent.com/WeeAris/RK-KSU-AOSP-Daily-Build/main/0001-Add-KernelSU-calls-to-the-kernel-source.patch" -O KernelSU.patch
+        git apply ./KernelSU.patch
+        
     - name: Generate Kernel Configuration
       run: |
         cd android-kernel
@@ -50,10 +57,10 @@ jobs:
         ######################
         make CC=clang O=out ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_COMPAT=arm-linux-gnueabi- NM=llvm-nm OBJDUMP=llvm-objdump STRIP=llvm-strip $KERNEL_DEFCONFIG 
         ######################
-        sed -i "/RealKing/{s/-/-${KSU_VERSION}-/}" out/.config
-        sed -i "/RealKing/{s/RealKing/RK-KSU/}" out/.config
+        sed -i "/RealKing/{s/-/-${KSU_VERSION}-/}" out/.config                     sed -i "/RealKing/{s/~RealKing/-RK-KSU/}" out/.config
         KERNEL_NAME=`grep "RK-KSU" out/.config | sed 's|//|-|' | awk -F\" '{print $2}'`
         echo "ZIMAGE_NAME=${KERNEL_NAME}-${DEVICE_NAME}" >> $GITHUB_ENV
+         sed -i 's/# CONFIG_SECCOMP is not set/CONFIG_SECCOMP=y/' ./out/.config
                
     - name: Build Kernel
       run: |
