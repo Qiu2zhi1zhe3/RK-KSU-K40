@@ -60,8 +60,8 @@ jobs:
         sed -i "/RealKing/{s/-/-${KSU_VERSION}-/}" out/.config        
         KERNEL_NAME=`grep "RK-KSU" out/.config | sed 's|//|-|' | awk -F\" '{print $2}'`
         echo "ZIMAGE_NAME=${KERNEL_NAME}-${DEVICE_NAME}" >> $GITHUB_ENV
-        sed -i 's/# CONFIG_SECCOMP is not set/CONFIG_SECCOMP=y/' ./out/.config
-               
+        sed -i "s/# CONFIG_SECCOMP is not set/CONFIG_SECCOMP=y/" ./out/.config
+
     - name: Build Kernel
       run: |
         cd android-kernel
