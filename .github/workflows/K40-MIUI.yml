@@ -28,14 +28,7 @@ jobs:
         7za x clang.7z
         CLANG_DIR=`pwd`
         echo "CLANG_DIR=$CLANG_DIR" >> $GITHUB_ENV
-      
-    - name: Setup KernelSU
-      run: |
-        cd android-kernel
-        curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
-        wget -q "https://raw.githubusercontent.com/WeeAris/RK-KSU-AOSP-Daily-Build/main/0001-Add-KernelSU-calls-to-the-kernel-source.patch" -O KernelSU.patch
-        git apply ./KernelSU.patch
-        
+          
     - name: Generate Kernel Configuration
       run: |
         cd android-kernel
