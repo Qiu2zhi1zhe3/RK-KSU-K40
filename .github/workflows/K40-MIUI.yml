@@ -40,7 +40,7 @@ jobs:
       run: |
         cd android-kernel
         PATH=${{ env.CLANG_DIR }}/bin:$PATH
-        DEVICE_NAME=Alioth
+        DEVICE_NAME=K40
         KERNEL_DEFCONFIG=vendor/alioth_defconfig
         KERNEL_DIR=`pwd`
         echo "KERNEL_DIR=${KERNEL_DIR}" >> $GITHUB_ENV
@@ -56,9 +56,7 @@ jobs:
         cd $KERNEL_DIR
         ######################
         make CC=clang O=out ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_COMPAT=arm-linux-gnueabi- NM=llvm-nm OBJDUMP=llvm-objdump STRIP=llvm-strip $KERNEL_DEFCONFIG 
-        ######################
-        sed -i "/RealKing/{s/~RealKing/RK-SU/}" out/.config
-        KERNEL_NAME=`grep "RK-KSU" out/.config | sed 's|//|-|' | awk -F\" '{print $2}'`
+        #####################
         echo "ZIMAGE_NAME=RK-${DEVICE_NAME}" >> $GITHUB_ENV
 
     - name: Build Kernel
