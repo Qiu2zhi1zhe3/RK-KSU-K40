@@ -40,7 +40,7 @@ jobs:
       run: |
         cd android-kernel
         PATH=${{ env.CLANG_DIR }}/bin:$PATH
-        DEVICE_NAME=K40
+        DEVICE_NAME=Alioth
         KERNEL_DEFCONFIG=vendor/alioth_defconfig
         KERNEL_DIR=`pwd`
         echo "KERNEL_DIR=${KERNEL_DIR}" >> $GITHUB_ENV
@@ -55,8 +55,8 @@ jobs:
         KSU_VERSION=$((10000+200+`git rev-list --count HEAD`))
         cd $KERNEL_DIR
         ######################
-        make CC=clang O=out ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_COMPAT=arm-linux-gnueabi- NM=llvm-nm OBJDUMP=llvm-objdump STRIP=llvm-strip $KERNEL_DEFCONFIG 
-        #####################
+        make CC=clang O=out ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_COMPAT=arm-linux-gnueabi- NM=llvm-nm LLVM=1 LLVM_IAS=1 $KERNEL_DEFCONFIG 
+        ######################
         echo "ZIMAGE_NAME=RK-${DEVICE_NAME}" >> $GITHUB_ENV
 
     - name: Build Kernel
@@ -68,7 +68,7 @@ jobs:
         KBUILD_COMPILER_STRING="$(clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
         KBUILD_BUILD_HOST=GitHub
         KBUILD_BUILD_USER=$(echo ${{ github.actor }} | tr A-Z a-z)   
-        make -j$(nproc --all) CC=clang O=out ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_COMPAT=arm-linux-gnueabi- NM=llvm-nm OBJDUMP=llvm-objdump STRIP=llvm-strip
+        make -j$(nproc --all) CC=clang O=out ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_COMPAT=arm-linux-gnueabi- NM=llvm-nm LLVM=1 LLVM_IAS=1
   
     - name: ZIP Kernel
       run: |
@@ -78,7 +78,7 @@ jobs:
         cp -fp ${{ env.ZIMAGE_DIR }}/Image.gz tmp
         cp -fp ${{ env.ZIMAGE_DIR }}/dtbo.img tmp
         cp -fp ${{ env.ZIMAGE_DIR }}/dtb tmp
-        cp -rp ./AnyKernel3/* tmp
+        cp -rp ./anykernel/* tmp
         cd tmp
         7za a -mx9 tmp.zip *
         cd ..
