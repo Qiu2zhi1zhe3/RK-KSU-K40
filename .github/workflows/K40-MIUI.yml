@@ -57,10 +57,9 @@ jobs:
         ######################
         make CC=clang O=out ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_COMPAT=arm-linux-gnueabi- NM=llvm-nm OBJDUMP=llvm-objdump STRIP=llvm-strip $KERNEL_DEFCONFIG 
         ######################
-        sed -i "/RealKing/{s/-/-${KSU_VERSION}-/}" out/.config
-        sed -i "/RealKing/{s/~RealKing/RK-KSU/}" out/.config
+        sed -i "/RealKing/{s/~RealKing/RK-SU/}" out/.config
         KERNEL_NAME=`grep "RK-KSU" out/.config | sed 's|//|-|' | awk -F\" '{print $2}'`
-        echo "ZIMAGE_NAME=${KERNEL_NAME}-${DEVICE_NAME}" >> $GITHUB_ENV
+        echo "ZIMAGE_NAME=RK-${DEVICE_NAME}" >> $GITHUB_ENV
 
     - name: Build Kernel
       run: |
