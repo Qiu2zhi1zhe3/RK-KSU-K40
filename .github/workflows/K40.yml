@@ -10,7 +10,7 @@ jobs:
     - uses: actions/checkout@v3
     - name: Checkout Kernel Source Code
       run: |
-        git clone --depth=1 https://codeberg.org/HK122707/RK10.2 -b 12.1-alioth android-kernel
+        git clone --depth=1 https://codeberg.org/HK122707/RK10.4 -b 12.1-alioth android-kernel
       
     - name: Setup Build Environment
       run: |
