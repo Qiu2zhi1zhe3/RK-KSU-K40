@@ -32,6 +32,9 @@ jobs:
     - name: Setup KernelSU
       run: |
         cd android-kernel
+        echo "CONFIG_MODULES=y" >> arch/arm64/configs/vendor/alioth_defconfig
+        echo "CONFIG_KPROBES=y" >> arch/arm64/configs/vendor/alioth_defconfig
+        echo "CONFIG_KPROBE_EVENTS=y" >> arch/arm64/configs/vendor/alioth_defconfig
         curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
         wget -q "https://raw.githubusercontent.com/WeeAris/RK-KSU-AOSP-Daily-Build/main/0001-Add-KernelSU-calls-to-the-kernel-source.patch" -O KernelSU.patch
         git apply ./KernelSU.patch
@@ -47,7 +50,6 @@ jobs:
         echo "ZIMAGE_DIR="${KERNEL_DIR}/out/arch/arm64/boot"" >> $GITHUB_ENV
         ARCH=arm64
         SUBARCH=arm64
-        sed -i 's/# CONFIG_SECCOMP is not set/CONFIG_SECCOMP=y/' out/.config
         KBUILD_COMPILER_STRING="$(clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
         KBUILD_BUILD_HOST=GitHub
         KBUILD_BUILD_USER=$(echo ${{ github.actor }} | tr A-Z a-z)
@@ -56,7 +58,8 @@ jobs:
         KSU_VERSION=$((10000+200+`git rev-list --count HEAD`))
         cd $KERNEL_DIR
         ######################
-        make CC=clang O=out ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_COMPAT=arm-linux-gnueabi- NM=llvm-nm LLVM=1 LLVM_IAS=1 $KERNEL_DEFCONFIG 
+        make CC=clang O=out ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_COMPAT=arm-linux-gnueabi- NM=llvm-nm OBJDUMP=llvm-objdump STRIP=llvm-strip
+        $KERNEL_DEFCONFIG 
         ######################
         echo "ZIMAGE_NAME=RK-${DEVICE_NAME}" >> $GITHUB_ENV
 
@@ -69,7 +72,7 @@ jobs:
         KBUILD_COMPILER_STRING="$(clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
         KBUILD_BUILD_HOST=GitHub
         KBUILD_BUILD_USER=$(echo ${{ github.actor }} | tr A-Z a-z)   
-        make -j$(nproc --all) CC=clang O=out ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_COMPAT=arm-linux-gnueabi- NM=llvm-nm LLVM=1 LLVM_IAS=1
+        make -j$(nproc --all) CC=clang O=out ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_COMPAT=arm-linux-gnueabi- NM=llvm-nm OBJDUMP=llvm-objdump STRIP=llvm-strip
         
     - name: ZIP Kernel
       run: |
