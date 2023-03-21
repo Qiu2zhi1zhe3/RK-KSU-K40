@@ -33,6 +33,7 @@ jobs:
         wget -q "https://raw.githubusercontent.com/WeeAris/RK-KSU-AOSP-Daily-Build/main/0001-Add-KernelSU-calls-to-the-kernel-source.patch" -O KernelSU.patch
         git apply ./KernelSU.patch
         
+        
     - name: Generate Kernel Configuration
       run: |
         cd android-kernel
@@ -43,8 +44,7 @@ jobs:
         echo "KERNEL_DIR=${KERNEL_DIR}" >> $GITHUB_ENV
         echo "ZIMAGE_DIR="${KERNEL_DIR}/out/arch/arm64/boot"" >> $GITHUB_ENV
         ARCH=arm64
-        SUBARCH=arm64
-        KBUILD_COMPILER_STRING="$(clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
+        SUBARCH=arm64        
         KBUILD_BUILD_HOST=GitHub
         KBUILD_BUILD_USER=$(echo ${{ github.actor }} | tr A-Z a-z)
         ######################
@@ -61,11 +61,10 @@ jobs:
         cd android-kernel
         PATH=${{ env.CLANG_DIR }}/bin:$PATH
         clang -v
-        SUBARCH=arm64
-        KBUILD_COMPILER_STRING="$(clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
+        SUBARCH=arm64 
         KBUILD_BUILD_HOST=GitHub
         KBUILD_BUILD_USER=$(echo ${{ github.actor }} | tr A-Z a-z)       
-        make -j$(nproc --all) CC=clang O=out ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_COMPAT=arm-linux-gnueabi- NM=llvm-nm OBJDUMP=llvm-objdump STRIP=llvm-strip
+        make -j$(nproc --all) CC=clang O=out ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_COMPAT=arm-linux-gnueabi- NM=llvm-nm OBJDUMP=llvm-objdump STRIP=llvm-strip LLVM=1 LLVM_IAS=1
   
     - name: ZIP Kernel
       run: |
