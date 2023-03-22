@@ -1,4 +1,4 @@
-name: Build MIUI K40
+name: Build MIUI-RK K40
 
 on: 
   workflow_dispatch:
@@ -12,7 +12,7 @@ jobs:
       with:
         github-server-url: 'https://github.com'
         repository: Rohail33/RealKing-kernel-SM8250
-        ref: 12.1-alioth
+        ref: alioth
         path: android-kernel
         
     - name: Setup Build Environment
@@ -33,7 +33,7 @@ jobs:
       run: |
         cd android-kernel
         sed -i 's/CONFIG_LOCALVERSION=/# /' arch/arm64/configs/vendor/alioth_defconfig
-        sed -i '/-Reborn/aCONFIG_LOCALVERSION="~MIUI-RK-SU"' arch/arm64/configs/vendor/alioth_defconfig
+        sed -i '/-Reborn/aCONFIG_LOCALVERSION="~MIUI-RealKing"' arch/arm64/configs/vendor/alioth_defconfig
         echo "CONFIG_SECCOMP=y" >> arch/arm64/configs/vendor/alioth_defconfig
         curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
         wget -q "https://raw.githubusercontent.com/WeeAris/RK-KSU-AOSP-Daily-Build/main/0001-Add-KernelSU-calls-to-the-kernel-source.patch" -O KernelSU.patch
