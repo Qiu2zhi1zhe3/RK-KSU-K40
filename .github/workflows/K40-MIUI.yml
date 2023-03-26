@@ -32,7 +32,7 @@ jobs:
     - name: Setup KernelSU
       run: |
         cd android-kernel
-        git clone https://github.com/HK122707/AnyKernel3 -b master shuaji
+        sed -i '49,59d' anykernel/anykernel.sh
         sed -i 's/CONFIG_LOCALVERSION=/# /' arch/arm64/configs/alioth_defconfig
         sed -i '/-Reborn/aCONFIG_LOCALVERSION="~RealKing"' arch/arm64/configs/alioth_defconfig
         curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
@@ -79,10 +79,8 @@ jobs:
         cp -fp ${{ env.ZIMAGE_DIR }}/Image.gz tmp
         cp -fp ${{ env.ZIMAGE_DIR }}/dtbo.img tmp
         cp -fp ${{ env.ZIMAGE_DIR }}/dtb tmp
-        cp -rp shuaji/AnyKernel3/* tmp
+        cp -rp ./anykernel/* tmp
         cd tmp
-        rm -rf README.md
-        rm -rf .git* 
         7za a -mx9 tmp.zip *
         cd ..
         echo "FINAL_ZINAME="${{ env.ZIMAGE_NAME }}"" >> $GITHUB_ENV
