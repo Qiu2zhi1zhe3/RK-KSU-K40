@@ -32,7 +32,7 @@ jobs:
     - name: Setup KernelSU
       run: |
         cd android-kernel
-        git clone --depth=1 https://github.com/HK122707/AnyKernel3 -b master shuaji
+        git clone https://github.com/HK122707/AnyKernel3 -b master shuaji
         sed -i 's/CONFIG_LOCALVERSION=/# /' arch/arm64/configs/alioth_defconfig
         sed -i '/-Reborn/aCONFIG_LOCALVERSION="~RealKing"' arch/arm64/configs/alioth_defconfig
         curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
