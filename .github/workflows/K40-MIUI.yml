@@ -74,6 +74,7 @@ jobs:
       run: |
         mkdir image_output
         cd android-kernel
+        sed -i '48,60d' anykernel/anykernel.sh
         mkdir -p tmp
         cp -fp ${{ env.ZIMAGE_DIR }}/Image.gz tmp
         cp -fp ${{ env.ZIMAGE_DIR }}/dtbo.img tmp
