@@ -74,13 +74,15 @@ jobs:
       run: |
         mkdir image_output
         cd android-kernel
-        sed -i '48,60d' anykernel/anykernel.sh
+        git clone https://github.com/HK122707/AnyKernel3
         mkdir -p tmp
         cp -fp ${{ env.ZIMAGE_DIR }}/Image.gz tmp
         cp -fp ${{ env.ZIMAGE_DIR }}/dtbo.img tmp
         cp -fp ${{ env.ZIMAGE_DIR }}/dtb tmp
-        cp -rp ./anykernel/* tmp
+        cp -rp ./AnyKernel3/* tmp
         cd tmp
+        rm -rf README.md
+        rm -rf .git* 
         7za a -mx9 tmp.zip *
         cd ..
         echo "FINAL_ZINAME="${{ env.ZIMAGE_NAME }}"" >> $GITHUB_ENV
