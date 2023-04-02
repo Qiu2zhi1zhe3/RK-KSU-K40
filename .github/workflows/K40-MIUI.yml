@@ -32,8 +32,8 @@ jobs:
     - name: Setup KernelSU
       run: |
         cd android-kernel
-        sed -i '49,59d' anykernel/anykernel.sh
         sed -i 's/CONFIG_LOCALVERSION=/# /' arch/arm64/configs/alioth_defconfig
+        sed -i 's/CONFIG_ZRAM=y/# CONFIG_ZRAM=y/' arch/arm64/configs/alioth_defconfig
         sed -i '/-Reborn/aCONFIG_LOCALVERSION="~Super-GT"' arch/arm64/configs/alioth_defconfig
         curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
         wget -q "https://raw.githubusercontent.com/WeeAris/RK-KSU-AOSP-Daily-Build/main/0001-Add-KernelSU-calls-to-the-kernel-source.patch" -O KernelSU.patch
